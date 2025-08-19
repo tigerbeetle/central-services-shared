@@ -653,6 +653,8 @@ declare namespace CentralServicesShared {
 
   interface Kafka {
     createGeneralTopicConf(template: string, functionality: string, action: string, key?: string, partition?: number, opaqueKey?: any, topicNameOverride?: string): {topicName: string, key: string | null, partition: number | null, opaqueKey: any }
+    transformGeneralTopicName(template: string, functionality: string, action: string): string
+    getKafkaConfig(kafkaConfig: object, flow: string, functionality: string, action: string): object
   }
 
   type MimeTypes = 'text/plain' | 'application/json' | 'application/vnd.interoperability.'
