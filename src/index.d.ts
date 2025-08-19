@@ -816,6 +816,24 @@ declare namespace CentralServicesShared {
     createLock(config: DistributedLockConfig, logger?: ILogger): DistributedLock;
   }
 
+  interface RethrowOptions {
+    operation?: string;
+    step?: string;
+    loggerOverride?: ILogger;
+  }
+
+  interface RethrowModule {
+    rethrowAndCountFspiopError(error: Error, options?: RethrowOptions, context?: string): never;
+    rethrowDatabaseError(error: Error, options?: RethrowOptions): never;
+    rethrowCachedDatabaseError(error: Error, options?: RethrowOptions): never;
+    rethrowRedisError(error: Error, options?: RethrowOptions): never;
+    rethrowKafkaError(error: Error, options?: RethrowOptions): never;
+    rethrowCacheError(error: Error, options?: RethrowOptions): never;
+    constructSystemExtensionError(error: Error, system: string): Error;
+    countFspiopError(error: Error, options?: RethrowOptions, context?: string): Error;
+    with(context: string): RethrowModule;
+  }
+
   interface Util {
     Endpoints: Endpoints;
     Participants: Participants;
@@ -828,6 +846,7 @@ declare namespace CentralServicesShared {
     HeaderValidation: HeaderValidation;
     Redis: Redis;
     distLock: DistLock;
+    rethrow: RethrowModule;
   }
 
   const Enum: Enum
