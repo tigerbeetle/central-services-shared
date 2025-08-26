@@ -433,6 +433,56 @@ declare namespace CentralServicesShared {
     LIMIT_ADJUSTMENT = 'limit-adjustment'
   }
 
+  enum LedgerAccountTypeEnum {
+    POSITION = 1,
+    SETTLEMENT = 2,
+    HUB_RECONCILIATION = 3,
+    HUB_MULTILATERAL_SETTLEMENT = 4,
+    HUB_FEE = 5,
+    POSITION_REMITTANCE = 7,
+    SETTLEMENT_REMITTANCE = 8
+  }
+
+  enum LedgerEntryTypeEnum {
+    PRINCIPLE_VALUE = 1,
+    INTERCHANGE_FEE = 2,
+    HUB_FEE = 3,
+    POSITION_DEPOSIT = 4,
+    POSITION_WITHDRAWAL = 5,
+    SETTLEMENT_NET_RECIPIENT = 6,
+    SETTLEMENT_NET_SENDER = 7,
+    SETTLEMENT_NET_ZERO = 8,
+    SETTLEMENT_ACCOUNT_DEPOSIT = 9,
+    SETTLEMENT_ACCOUNT_WITHDRAWAL = 10
+  }
+
+  enum ParticipantLimitTypeEnum {
+    NET_DEBIT_CAP = 1
+  }
+
+  enum TransferParticipantRoleTypeEnum {
+    PAYER_DFSP = 1,
+    PAYEE_DFSP = 2,
+    HUB = 3,
+    DFSP_SETTLEMENT = 4,
+    DFSP_POSITION = 5,
+    INITIATING_FSP = 6,
+    COUNTER_PARTY_FSP = 7
+  }
+
+  enum PartyAccountTypesEnum {
+    MSISDN = 'MSISDN',
+    EMAIL = 'EMAIL',
+    PERSONAL_ID = 'PERSONAL_ID',
+    BUSINESS = 'BUSINESS',
+    DEVICE = 'DEVICE',
+    ACCOUNT_ID = 'ACCOUNT_ID',
+    IBAN = 'IBAN',
+    ALIAS = 'ALIAS',
+    CONSENT = 'CONSENT',
+    THIRD_PARTY_LINK = 'THIRD_PARTY_LINK'
+  }
+
   interface Enum {
     Http: HttpEnum;
     EndPoints: EndPointsEnum;
@@ -616,6 +666,53 @@ declare namespace CentralServicesShared {
       };
       AdminNotificationActions: {
         LIMIT_ADJUSTMENT: AdminNotificationActionsEnum.LIMIT_ADJUSTMENT;
+      };
+    };
+    Accounts: {
+      LedgerAccountType: {
+        POSITION: LedgerAccountTypeEnum.POSITION;
+        SETTLEMENT: LedgerAccountTypeEnum.SETTLEMENT;
+        HUB_RECONCILIATION: LedgerAccountTypeEnum.HUB_RECONCILIATION;
+        HUB_MULTILATERAL_SETTLEMENT: LedgerAccountTypeEnum.HUB_MULTILATERAL_SETTLEMENT;
+        HUB_FEE: LedgerAccountTypeEnum.HUB_FEE;
+        POSITION_REMITTANCE: LedgerAccountTypeEnum.POSITION_REMITTANCE;
+        SETTLEMENT_REMITTANCE: LedgerAccountTypeEnum.SETTLEMENT_REMITTANCE;
+      };
+      LedgerEntryType: {
+        PRINCIPLE_VALUE: LedgerEntryTypeEnum.PRINCIPLE_VALUE;
+        INTERCHANGE_FEE: LedgerEntryTypeEnum.INTERCHANGE_FEE;
+        HUB_FEE: LedgerEntryTypeEnum.HUB_FEE;
+        POSITION_DEPOSIT: LedgerEntryTypeEnum.POSITION_DEPOSIT;
+        POSITION_WITHDRAWAL: LedgerEntryTypeEnum.POSITION_WITHDRAWAL;
+        SETTLEMENT_NET_RECIPIENT: LedgerEntryTypeEnum.SETTLEMENT_NET_RECIPIENT;
+        SETTLEMENT_NET_SENDER: LedgerEntryTypeEnum.SETTLEMENT_NET_SENDER;
+        SETTLEMENT_NET_ZERO: LedgerEntryTypeEnum.SETTLEMENT_NET_ZERO;
+        SETTLEMENT_ACCOUNT_DEPOSIT: LedgerEntryTypeEnum.SETTLEMENT_ACCOUNT_DEPOSIT;
+        SETTLEMENT_ACCOUNT_WITHDRAWAL: LedgerEntryTypeEnum.SETTLEMENT_ACCOUNT_WITHDRAWAL;
+      };
+      ParticipantLimitType: {
+        NET_DEBIT_CAP: ParticipantLimitTypeEnum.NET_DEBIT_CAP;
+      };
+      TransferParticipantRoleType: {
+        PAYER_DFSP: TransferParticipantRoleTypeEnum.PAYER_DFSP;
+        PAYEE_DFSP: TransferParticipantRoleTypeEnum.PAYEE_DFSP;
+        HUB: TransferParticipantRoleTypeEnum.HUB;
+        DFSP_SETTLEMENT: TransferParticipantRoleTypeEnum.DFSP_SETTLEMENT;
+        DFSP_POSITION: TransferParticipantRoleTypeEnum.DFSP_POSITION;
+        INITIATING_FSP: TransferParticipantRoleTypeEnum.INITIATING_FSP;
+        COUNTER_PARTY_FSP: TransferParticipantRoleTypeEnum.COUNTER_PARTY_FSP;
+      };
+      PartyAccountTypes: {
+        MSISDN: PartyAccountTypesEnum.MSISDN;
+        EMAIL: PartyAccountTypesEnum.EMAIL;
+        PERSONAL_ID: PartyAccountTypesEnum.PERSONAL_ID;
+        BUSINESS: PartyAccountTypesEnum.BUSINESS;
+        DEVICE: PartyAccountTypesEnum.DEVICE;
+        ACCOUNT_ID: PartyAccountTypesEnum.ACCOUNT_ID;
+        IBAN: PartyAccountTypesEnum.IBAN;
+        ALIAS: PartyAccountTypesEnum.ALIAS;
+        CONSENT: PartyAccountTypesEnum.CONSENT;
+        THIRD_PARTY_LINK: PartyAccountTypesEnum.THIRD_PARTY_LINK;
       };
     };
   }
