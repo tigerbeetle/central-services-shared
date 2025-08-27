@@ -491,6 +491,12 @@ declare namespace CentralServicesShared {
         CONSUMER: string,
         PRODUCER: string,
       }
+      Topics: {
+        NOTIFICATION: string;
+        POSITION: string;
+        TRANSFER: string;
+        [key: string]: string;
+      }
     }
     Events: {
       Event: {
@@ -758,6 +764,8 @@ declare namespace CentralServicesShared {
   interface StreamingProtocol {
     decodePayload(input: string, options: Object): Object
     encodePayload(input: string | Buffer, mimeType: MimeTypes): string
+    createEventState(status: string, errorCode: string, errorDescription: string): any
+    createMetadataWithCorrelatedEvent(transferId: string, topic: string, action: string, state: any): any
   }
 
   interface HeaderValidation {
@@ -944,6 +952,10 @@ declare namespace CentralServicesShared {
     Redis: Redis;
     distLock: DistLock;
     rethrow: RethrowModule;
+    resourceVersions: Record<string, { contentVersion: string }>;
+    Http: {
+      SwitchDefaultHeaders: (destination: string, resource: string, hubName: string, contentVersion: string) => Record<string, any>;
+    };
   }
 
   const Enum: Enum
