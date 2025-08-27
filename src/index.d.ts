@@ -499,6 +499,10 @@ declare namespace CentralServicesShared {
       }
     }
     Events: {
+      EventStatus: {
+        FAILURE: { status: string };
+        SUCCESS: { status: string };
+      };
       Event: {
         Action: {
           ABORT: EventActionEnum.ABORT;
