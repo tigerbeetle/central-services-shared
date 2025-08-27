@@ -770,6 +770,7 @@ declare namespace CentralServicesShared {
     encodePayload(input: string | Buffer, mimeType: MimeTypes): string
     createEventState(status: string, errorCode: string, errorDescription: string): any
     createMetadataWithCorrelatedEvent(transferId: string, topic: string, action: string, state: any): any
+    createMessage(id: string, destination: string, source: string, metadata: any, headers: any, payload: any, uriParams: any, contentType: string): any
   }
 
   interface HeaderValidation {

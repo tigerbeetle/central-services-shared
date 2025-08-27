@@ -67,6 +67,7 @@
     "@hapi/catbox-memory": "5.0.1",
     "@hapi/hapi": "21.4.2",
     "@hapi/joi-date": "2.0.1",
+    "@mojaloop/central-services-shared": "^18.30.7",
     "@mojaloop/inter-scheme-proxy-cache-lib": "2.6.0",
     "@opentelemetry/api": "1.9.0",
     "async-exit-hook": "2.0.1",
