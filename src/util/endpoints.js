@@ -196,6 +196,9 @@ exports.getEndpoint = async (switchUrl, fsp, endpointType, options = {}, renderO
     if ('value' in endpoints && 'cached' in endpoints) {
       hit = endpoints.cached !== null
       endpoints = endpoints.value
+      if (!hit) {
+        log.warn(`getEndpoint cache miss for fsp=${fsp}, endpointType=${endpointType}`)
+      }
     }
 
     const result = renderEndpoint(endpoints)
