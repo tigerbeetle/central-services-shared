@@ -944,6 +944,41 @@ declare namespace CentralServicesShared {
     with(context: string): RethrowModule;
   }
 
+  interface SpanTags {
+    transactionType: string;
+    transactionAction: string;
+    transactionId: string | undefined;
+    source: string | undefined;
+    destination: string | undefined;
+    payerFsp?: string;
+    payeeFsp?: string;
+  }
+
+  interface QueryTags {
+    serviceName: string;
+    auditType: string;
+    contentType: string;
+    operation: string;
+    [key: string]: any;
+  }
+
+  interface TransferSpanInput {
+    payload?: any;
+    headers?: Record<string, string>;
+    params?: { id?: string };
+  }
+
+  interface EventFramework {
+    getTransferSpanTags(input: TransferSpanInput, transactionType: string, transactionAction: string): SpanTags;
+    getSpanTags(transactionType: string, transactionAction: string, transactionId: string, source: string, destination: string): SpanTags;
+    getQueryTags(serviceName: string, auditType: string, contentType: string, operation: string, additionalTags?: Record<string, any>): QueryTags;
+    Tags: {
+      getTransferSpanTags: (input: TransferSpanInput, transactionType: string, transactionAction: string) => SpanTags;
+      getSpanTags: (transactionType: string, transactionAction: string, transactionId: string, source: string, destination: string) => SpanTags;
+      getQueryTags: (serviceName: string, auditType: string, contentType: string, operation: string, additionalTags?: Record<string, any>) => QueryTags;
+    };
+  }
+
   interface Util {
     Endpoints: Endpoints;
     Participants: Participants;
@@ -957,6 +992,7 @@ declare namespace CentralServicesShared {
     Redis: Redis;
     distLock: DistLock;
     rethrow: RethrowModule;
+    EventFramework: EventFramework;
     resourceVersions: Record<string, { contentVersion: string }>;
     Http: {
       SwitchDefaultHeaders: (destination: string, resource: string, hubName: string, contentVersion: string) => Record<string, any>;
