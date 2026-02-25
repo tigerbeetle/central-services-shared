@@ -29,7 +29,7 @@
  ******/
 'use strict'
 
-const http = require('node:http')
+const { HttpAgent } = require('agentkeepalive')
 const request = require('axios')
 const stringify = require('fast-safe-stringify')
 const EventSdk = require('@mojaloop/event-sdk')
@@ -48,10 +48,19 @@ const MISSING_FUNCTION_PARAMETERS = 'Missing parameters for function'
 delete request.defaults.headers.common.Accept
 
 const keepAlive = (process.env.HTTP_AGENT_KEEP_ALIVE ?? 'true') === 'true'
-logger.verbose('http keepAlive:', { keepAlive })
+// Close idle sockets after 4 seconds (before server's 5 second timeout)
+const freeSocketTimeout = parseInt(process.env.HTTP_AGENT_FREE_SOCKET_TIMEOUT ?? '4000')
+logger.verbose('http keepAlive:', { keepAlive, freeSocketTimeout })
 
-// Enable keepalive for http
-request.defaults.httpAgent = new http.Agent({ keepAlive })
+// Enable keepalive for http with idle socket timeout
+// Using agentkeepalive which actually supports freeSocketTimeout (native http.Agent ignores it)
+request.defaults.httpAgent = new HttpAgent({
+  keepAlive,
+  // Close idle sockets before server does to avoid ECONNRESET on stale connections
+  freeSocketTimeout,
+  // Limit idle sockets per host to reduce stale connection risk
+  maxFreeSockets: 64
+})
 request.defaults.httpAgent.toJSON = () => ({})
 
 /**
@@ -82,6 +91,10 @@ request.defaults.httpAgent.toJSON = () => ({})
  *@return {Promise<any>} The response for the request being sent or error object with response included
  */
 
+// Errors that indicate a stale keep-alive connection - should retry
+const RETRYABLE_ERRORS = ['ECONNRESET', 'EPIPE', 'ENOTCONN', 'ETIMEDOUT', 'ECONNREFUSED']
+const MAX_RETRIES = 2
+
 const sendRequest = async ({
   url,
   headers,
@@ -96,7 +109,8 @@ const sendRequest = async ({
   protocolVersions = undefined,
   apiType = API_TYPES.fspiop,
   axiosRequestOptionsOverride = {},
-  hubNameRegex
+  hubNameRegex,
+  _retryCount = 0
 }) => {
   const histTimerEnd = Metrics.getHistogram(
     'sendRequest',
@@ -156,6 +170,32 @@ const sendRequest = async ({
     histTimerEnd({ success: true, source, destination, method })
     return response
   } catch (error) {
+    // Retry on connection reset errors (stale keep-alive connections)
+    if (RETRYABLE_ERRORS.includes(error.code) && _retryCount < MAX_RETRIES) {
+      logger.debug('Retrying request due to connection error', {
+        code: error.code,
+        url,
+        retryCount: _retryCount + 1
+      })
+      return sendRequest({
+        url,
+        headers,
+        source,
+        destination,
+        method,
+        payload,
+        params,
+        responseType,
+        span,
+        jwsSigner,
+        protocolVersions,
+        apiType,
+        axiosRequestOptionsOverride,
+        hubNameRegex,
+        _retryCount: _retryCount + 1
+      })
+    }
+
     logger.error('error in request.sendRequest:', {
       code: error.code,
       message: error.message,
